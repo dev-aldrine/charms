@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F9F8F4;
+    color: #2D3A31;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom Botanical Utility Styles */
+.font-editorial {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-body {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+}
+
+/* Architectural Arch styling */
+.arch-frame {
+  border-radius: 160px 160px 24px 24px;
+}
+
+.arch-card {
+  border-radius: 32px;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F9F8F4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DCCFC2;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8C9A84;
+}

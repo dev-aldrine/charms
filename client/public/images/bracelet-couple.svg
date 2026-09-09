@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="70%" stop-color="#F7F6F3" />
+      <stop offset="100%" stop-color="#EAE7DF" />
+    </radialGradient>
+    <radialGradient id="howliteGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#F1F1F0" />
+      <stop offset="85%" stop-color="#D9D9D6" />
+      <stop offset="100%" stop-color="#B0B0AC" />
+    </radialGradient>
+    <radialGradient id="obsidianGrad" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#4A5568" />
+      <stop offset="40%" stop-color="#1A202C" />
+      <stop offset="100%" stop-color="#050709" />
+    </radialGradient>
+    <linearGradient id="roseGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE0E0" />
+      <stop offset="50%" stop-color="#E0A899" />
+      <stop offset="100%" stop-color="#9C5E50" />
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#2D3A31" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <rect width="800" height="800" fill="url(#bgGlow)" />
+  
+  <!-- Left Bracelet Loop (White Howlite Set) -->
+  <ellipse cx="340" cy="380" rx="160" ry="200" fill="none" stroke="#D1D5DB" stroke-width="4" stroke-dasharray="8 4" transform="rotate(-15 340 380)" />
+  <!-- Right Bracelet Loop (Matte Obsidian Set) -->
+  <ellipse cx="460" cy="420" rx="160" ry="200" fill="none" stroke="#4B5563" stroke-width="4" transform="rotate(15 460 420)" />
+
+  <!-- Beads for Duo -->
+  <g id="duoBeads">
+    <!-- White Set -->
+    <circle cx="240" cy="280" r="26" fill="url(#howliteGrad)" filter="url(#softShadow)" />
+    <path d="M232,270 Q240,280 236,290" stroke="#71717A" stroke-width="1.5" fill="none" opacity="0.4" />
+    <circle cx="210" cy="360" r="26" fill="url(#howliteGrad)" filter="url(#softShadow)" />
+    <circle cx="230" cy="440" r="26" fill="url(#howliteGrad)" filter="url(#softShadow)" />
+    <circle cx="290" cy="510" r="26" fill="url(#howliteGrad)" filter="url(#softShadow)" />
+
+    <!-- Black Set -->
+    <circle cx="560" cy="320" r="28" fill="url(#obsidianGrad)" filter="url(#softShadow)" />
+    <circle cx="590" cy="400" r="28" fill="url(#obsidianGrad)" filter="url(#softShadow)" />
+    <circle cx="570" cy="480" r="28" fill="url(#obsidianGrad)" filter="url(#softShadow)" />
+    <circle cx="510" cy="550" r="28" fill="url(#obsidianGrad)" filter="url(#softShadow)" />
+
+    <!-- Interlocking Magnetic Heart/Bar Charms at Intersection -->
+    <g transform="translate(400, 400)">
+      <rect x="-40" y="-12" width="38" height="24" rx="12" fill="url(#roseGold)" filter="url(#softShadow)" />
+      <text x="-21" y="4" font-family="'Source Sans 3', sans-serif" font-size="9" font-weight="bold" fill="#FFF" text-anchor="middle" letter-spacing="1">JOY</text>
+      
+      <rect x="2" y="-12" width="38" height="24" rx="12" fill="#1F2937" filter="url(#softShadow)" />
+      <text x="21" y="4" font-family="'Source Sans 3', sans-serif" font-size="9" font-weight="bold" fill="#F9FAFB" text-anchor="middle" letter-spacing="1">SOUL</text>
+    </g>
+  </g>
+
+  <text x="400" y="660" font-family="'Playfair Display', Georgia, serif" font-size="26" font-style="italic" fill="#2D3A31" opacity="0.3" text-anchor="middle" letter-spacing="4">
+    JOY’S ATELIER
+  </text>
+  <text x="400" y="685" font-family="'Source Sans 3', sans-serif" font-size="10" font-weight="600" fill="#2D3A31" opacity="0.25" text-anchor="middle" letter-spacing="6">
+    ELYSIAN DUO COUPLE SET
+  </text>
+</svg>

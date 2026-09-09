@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" width="100%" height="100%">
+  <!-- QR Ph Official Styled Vector Emblem -->
+  <defs>
+    <linearGradient id="phBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0038A8" />
+      <stop offset="100%" stop-color="#00246B" />
+    </linearGradient>
+    <linearGradient id="phRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#CE1126" />
+      <stop offset="100%" stop-color="#9B0011" />
+    </linearGradient>
+    <linearGradient id="phYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD116" />
+      <stop offset="100%" stop-color="#E5B200" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Pill -->
+  <rect x="2" y="2" width="196" height="76" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+
+  <!-- Left: QR Matrix Symbol -->
+  <g transform="translate(14, 15)">
+    <!-- QR Corner Boxes with Philippine Flag Colors -->
+    <rect x="0" y="0" width="22" height="22" rx="4" fill="none" stroke="url(#phBlue)" stroke-width="3"/>
+    <rect x="5" y="5" width="12" height="12" rx="2" fill="url(#phBlue)"/>
+
+    <rect x="28" y="0" width="22" height="22" rx="4" fill="none" stroke="url(#phRed)" stroke-width="3"/>
+    <rect x="33" y="5" width="12" height="12" rx="2" fill="url(#phRed)"/>
+
+    <rect x="0" y="28" width="22" height="22" rx="4" fill="none" stroke="url(#phYellow)" stroke-width="3"/>
+    <rect x="5" y="33" width="12" height="12" rx="2" fill="url(#phYellow)"/>
+
+    <!-- Small Data Points -->
+    <rect x="28" y="28" width="8" height="8" rx="2" fill="#1E293B"/>
+    <rect x="42" y="28" width="8" height="8" rx="2" fill="#1E293B"/>
+    <rect x="28" y="42" width="8" height="8" rx="2" fill="#1E293B"/>
+    <rect x="42" y="42" width="8" height="8" rx="2" fill="url(#phBlue)"/>
+  </g>
+
+  <!-- Right: "QR Ph" Typography -->
+  <g transform="translate(74, 26)">
+    <text x="0" y="28" font-family="'Source Sans 3', system-ui, sans-serif" font-weight="900" font-size="34" fill="#0038A8" letter-spacing="-1">
+      QR
+    </text>
+    <text x="52" y="28" font-family="'Playfair Display', Georgia, serif" font-weight="900" font-style="italic" font-size="36" fill="#CE1126" letter-spacing="-0.5">
+      Ph
+    </text>
+    <text x="0" y="42" font-family="'Source Sans 3', sans-serif" font-weight="700" font-size="7.5" fill="#64748B" letter-spacing="1.5">
+      NATIONAL QR STANDARD
+    </text>
+  </g>
+</svg>
