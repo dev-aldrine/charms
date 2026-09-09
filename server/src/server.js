@@ -5,17 +5,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
 
-// In-memory mock storage for rapid testing & demonstrative persistence
+// In-memory mock storage
 let orders = [];
 
 // Products Route
 app.get('/api/products', (req, res) => {
-  res.json({ success: true, count: 6 });
+  res.json({ success: true, count: 20 });
 });
 
 // PayMongo In-App QR Ph Order Creation
@@ -53,7 +52,7 @@ app.post('/api/payments/qrph/create', (req, res) => {
   }
 });
 
-// PayMongo Webhook Endpoint with Signature Handling
+// PayMongo Webhook Endpoint
 app.post('/api/webhooks/paymongo', (req, res) => {
   const { eventType, orderNumber } = req.body;
 
@@ -74,6 +73,13 @@ app.get('/api/orders/:orderNumber/status', (req, res) => {
   res.json({ success: true, order });
 });
 
-app.listen(PORT, () => {
-  console.log(`[Aura & Botanica API] Server running on http://localhost:${PORT}`);
-});
+// Export default for Vercel Serverless Function support
+export default app;
+
+// Listen only when run directly (local node execution)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`[Joy's Atelier API] Server running on http://localhost:${PORT}`);
+  });
+}
