@@ -1,7 +1,10 @@
 # Dependencies
 node_modules/
-.pnp
-.pnp.js
+dist/
+build/
+.next/
+.cache/
+coverage/
 
 # Testing
 coverage/
