@@ -5,7 +5,7 @@ import { formatPHP } from '../../utils/formatters';
 import { useCartStore } from '../../store/useCartStore';
 import { Spotlight } from '../core/Spotlight';
 
-export const ProductCard = ({ product, onQuickCustomize, index = 0 }) => {
+export const ProductCard = ({ product, onQuickCustomize, onSelectProduct, index = 0 }) => {
   const [selectedSize, setSelectedSize] = useState(product.availableSizes[1] || product.availableSizes[0]);
   const [isAdded, setIsAdded] = useState(false);
   const [imgSrc, setImgSrc] = useState(product.image);
@@ -20,7 +20,8 @@ export const ProductCard = ({ product, onQuickCustomize, index = 0 }) => {
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
     addItem({
       id: product.id,
       name: product.name,
@@ -35,13 +36,18 @@ export const ProductCard = ({ product, onQuickCustomize, index = 0 }) => {
     setTimeout(() => setIsAdded(false), 2000);
   };
 
-  const isStaggered = index % 2 === 1;
+  const handleCardClick = () => {
+    if (onSelectProduct) {
+      onSelectProduct(product);
+    }
+  };
 
   return (
     <motion.div
       whileHover={{ y: -6 }}
       transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
-      className="group relative flex flex-col bg-white rounded-3xl p-5 sm:p-5.5 border border-botanical-stone shadow-botanical-sm hover:shadow-botanical-lg transition-all duration-300"
+      onClick={handleCardClick}
+      className="group relative flex flex-col bg-white rounded-3xl p-5 sm:p-5.5 border border-botanical-stone shadow-botanical-sm hover:shadow-botanical-lg transition-all duration-300 cursor-pointer"
     >
       <Spotlight className="w-full">
         {/* Product Image Frame: Crisp Balanced Square */}
@@ -50,8 +56,7 @@ export const ProductCard = ({ product, onQuickCustomize, index = 0 }) => {
             src={imgSrc}
             onError={handleImageError}
             alt={product.name}
-            className="w-full h-full object-cover"
-            whileHover={{ scale: 1.06 }}
+            className="w-full h-full object-cover group-hover:scale-105"
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             loading="lazy"
           />
@@ -96,12 +101,16 @@ export const ProductCard = ({ product, onQuickCustomize, index = 0 }) => {
               <span className="text-botanical-forest/60 uppercase tracking-wider font-medium text-[10px]">
                 Size (cm):
               </span>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                 {product.availableSizes.slice(0, 4).map((size) => (
                   <motion.button
                     key={size}
+                    type="button"
                     whileTap={{ scale: 0.92 }}
-                    onClick={() => setSelectedSize(size)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedSize(size);
+                    }}
                     className={`w-6 h-6 rounded-full text-[10px] font-medium transition-all duration-200 ${
                       selectedSize === size
                         ? 'bg-botanical-forest text-white shadow-xs'
@@ -114,8 +123,9 @@ export const ProductCard = ({ product, onQuickCustomize, index = 0 }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 mt-3">
+            <div className="grid grid-cols-2 gap-2 mt-3" onClick={(e) => e.stopPropagation()}>
               <motion.button
+                type="button"
                 whileTap={{ scale: 0.95 }}
                 onClick={handleAddToCart}
                 className={`py-2.5 px-3 rounded-full text-[10px] font-semibold tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-1.5 ${
@@ -135,12 +145,15 @@ export const ProductCard = ({ product, onQuickCustomize, index = 0 }) => {
               </motion.button>
 
               <motion.button
+                type="button"
                 whileTap={{ scale: 0.95 }}
-                onClick={() => onQuickCustomize(product)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCardClick();
+                }}
                 className="py-2.5 px-3 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-botanical-stone hover:border-botanical-forest text-botanical-forest transition-colors duration-300 bg-white hover:bg-botanical-bg flex items-center justify-center gap-1"
               >
-                <Sparkles className="w-2.5 h-2.5 text-botanical-sage" />
-                <span>Custom</span>
+                <span>Details</span>
               </motion.button>
             </div>
           </div>

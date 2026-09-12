@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Ruler, Sparkles, Menu, X } from 'lucide-react';
+import { ShoppingBag, Ruler, Sparkles, Menu, X, User } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
+import { useAuthStore } from '../../store/useAuthStore';
 import { BRAND_CONFIG } from '../../brandConfig';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navbar = ({ onNavigate, currentTab }) => {
   const { items, openCart, openWristGuide } = useCartStore();
+  const { user, openAuthModal, openAccountDrawer } = useAuthStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleNavClick = (tab) => {
     onNavigate(tab);
     setMobileMenuOpen(false);
+  };
+
+  const handleAccountClick = () => {
+    if (user) {
+      onNavigate('profile');
+      setMobileMenuOpen(false);
+    } else {
+      openAuthModal();
+    }
   };
 
   return (
@@ -36,15 +47,6 @@ export const Navbar = ({ onNavigate, currentTab }) => {
               }`}
             >
               Collections
-            </button>
-            <button
-              onClick={() => handleNavClick('customizer')}
-              className={`flex items-center gap-1.5 transition-colors duration-300 hover:text-botanical-terracotta ${
-                currentTab === 'customizer' ? 'text-botanical-forest font-semibold border-b border-botanical-forest pb-0.5' : ''
-              }`}
-            >
-              <Sparkles className="w-3 h-3 text-botanical-sage" />
-              <span>Custom Studio</span>
             </button>
             <button
               onClick={() => handleNavClick('story')}
@@ -76,8 +78,17 @@ export const Navbar = ({ onNavigate, currentTab }) => {
           </p>
         </div>
 
-        {/* Right Column: Actions (Size Tool & Cart Bag) */}
-        <div className="flex items-center justify-end gap-3 md:gap-4">
+        {/* Right Column: Actions (User Account, Size Tool & Cart Bag) */}
+        <div className="flex items-center justify-end gap-2.5 sm:gap-3 md:gap-4">
+          <button
+            onClick={handleAccountClick}
+            className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider py-2 px-3 rounded-full border border-botanical-stone hover:border-botanical-sage text-botanical-forest transition-all duration-300 bg-white/70 hover:bg-white shadow-xs"
+            title={user ? `Logged in as ${user.email}` : 'Sign In'}
+          >
+            <User className="w-3.5 h-3.5 text-botanical-sage" />
+            <span className="hidden lg:inline">{user ? user.name?.split(' ')[0] || 'Account' : 'Sign In'}</span>
+          </button>
+
           <button
             onClick={openWristGuide}
             className="hidden sm:flex items-center gap-1.5 text-[11px] uppercase tracking-wider py-2 px-3.5 rounded-full border border-botanical-stone hover:border-botanical-sage text-botanical-forest transition-all duration-300 bg-white/70 hover:bg-white shadow-sm"
@@ -119,17 +130,20 @@ export const Navbar = ({ onNavigate, currentTab }) => {
                 Collections
               </button>
               <button
-                onClick={() => handleNavClick('customizer')}
-                className="text-left py-2 border-b border-botanical-stone/40 flex items-center gap-2"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-botanical-sage" />
-                <span>Custom Studio</span>
-              </button>
-              <button
                 onClick={() => handleNavClick('story')}
                 className="text-left py-2 border-b border-botanical-stone/40"
               >
                 Our Atelier
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleAccountClick();
+                }}
+                className="text-left py-2 border-b border-botanical-stone/40 flex items-center gap-2"
+              >
+                <User className="w-3.5 h-3.5 text-botanical-sage" />
+                <span>{user ? `Account (${user.email})` : 'Sign In / Account'}</span>
               </button>
               <button
                 onClick={() => {

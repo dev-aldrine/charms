@@ -8,6 +8,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
+import { useAuthStore } from '../../store/useAuthStore';
 import { formatPHP } from '../../utils/formatters';
 import { TransitionPanel } from '../core/TransitionPanel';
 import { BRAND_CONFIG } from '../../brandConfig';
@@ -21,10 +22,12 @@ export const CheckoutModal = () => {
     clearCart 
   } = useCartStore();
 
+  const { user } = useAuthStore();
+
   const [stepIndex, setStepIndex] = useState(0); // 0: address, 1: qrph, 2: confirmed
   const [formData, setFormData] = useState({
-    fullName: 'Maria Santos',
-    email: 'maria.santos@gmail.com',
+    fullName: user?.name || 'Maria Santos',
+    email: user?.email || 'maria.santos@gmail.com',
     phone: '09171234567',
     street: 'Unit 12B, Emerald Tower, 45 San Miguel Ave',
     barangay: 'San Antonio',
@@ -36,6 +39,16 @@ export const CheckoutModal = () => {
   const [orderNumber, setOrderNumber] = useState('');
   const [timeLeft, setTimeLeft] = useState(600);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  React.useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        fullName: user.name || prev.fullName,
+        email: user.email || prev.email
+      }));
+    }
+  }, [user]);
 
   React.useEffect(() => {
     if (isCheckoutOpen && !orderNumber) {
@@ -55,22 +68,53 @@ export const CheckoutModal = () => {
 
   const grandTotal = getGrandTotal();
 
-  const handleCreateOrder = (e) => {
+  const handleCreateOrder = async (e) => {
     e.preventDefault();
     setIsProcessing(true);
-    setTimeout(() => {
+
+    try {
+      // Create order via backend API
+      const res = await fetch('/api/payments/qrph/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderDetails: { items },
+          amount: grandTotal,
+          customer: formData
+        })
+      });
+
+      const data = await res.json();
+      if (data.success && data.orderNumber) {
+        setOrderNumber(data.orderNumber);
+      }
+    } catch (err) {
+      console.warn('Using local order simulation:', err);
+    } finally {
       setIsProcessing(false);
       setStepIndex(1);
-    }, 600);
+    }
   };
 
-  const handleSimulatePayment = () => {
+  const handleSimulatePayment = async () => {
     setIsProcessing(true);
-    setTimeout(() => {
+    try {
+      // Trigger webhook update on backend
+      await fetch('/api/webhooks/paymongo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventType: 'qrph.payment.paid',
+          orderNumber: orderNumber
+        })
+      });
+    } catch (err) {
+      console.warn('Webhook simulated locally');
+    } finally {
       setIsProcessing(false);
       setStepIndex(2);
       clearCart();
-    }, 1200);
+    }
   };
 
   const minutes = Math.floor(timeLeft / 60);

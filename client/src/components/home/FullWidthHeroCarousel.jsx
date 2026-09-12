@@ -121,21 +121,12 @@ export const FullWidthHeroCarousel = ({ onNavigateToCustomizer }) => {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center gap-4 pt-2">
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={onNavigateToCustomizer}
-              className="py-4 px-8 rounded-full bg-botanical-sage hover:bg-botanical-terracotta text-botanical-forest hover:text-white font-semibold text-xs uppercase tracking-widest transition-colors duration-300 shadow-2xl flex items-center gap-2 group"
-            >
-              <Sparkles className="w-4 h-4 text-botanical-forest group-hover:text-white transition-colors" />
-              <span>Enter Custom Studio</span>
-            </motion.button>
-
             <a
               href="#catalog"
-              className="py-4 px-8 rounded-full border border-white/40 hover:border-white bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold text-xs uppercase tracking-widest transition-all duration-300"
+              className="py-4 px-8 rounded-full bg-botanical-sage hover:bg-botanical-terracotta text-botanical-forest hover:text-white font-semibold text-xs uppercase tracking-widest transition-colors duration-300 shadow-2xl flex items-center gap-2 group"
             >
-              View Full Catalog
+              <span>Explore Collection</span>
+              <ArrowRight className="w-4 h-4 text-botanical-forest group-hover:text-white transition-transform group-hover:translate-x-1" />
             </a>
           </div>
         </div>

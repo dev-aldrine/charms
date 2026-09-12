@@ -5,20 +5,25 @@
 export const BRAND_CONFIG = {
   // Brand Names & Taglines
   brandName: "JOY'S",
-  brandSubtitle: "ATELIER",
+  brandSubtitle: "FAIRY CHARMS",
   tagline: "Haute Joaillerie • Living Minerals",
   announcement: "Complimentary Bespoke Sizing & Free Express Shipping Over ₱3,000",
   shippingThreshold: 3000,
   defaultShippingFee: 150,
 
-  // Theme Colors (Hex values)
+  // Theme Colors (Amethyst Palette)
   theme: {
-    bg: '#F9F8F4',           // Main page background (Rice Paper / Warm Alabaster)
-    forest: '#2D3A31',       // Primary Dark (Deep Forest Green / Text / Dark accents)
-    sage: '#8C9A84',         // Secondary Accent (Sage Green / Badges / Buttons)
-    clay: '#DCCFC2',         // Neutral Muted (Soft Clay / Subtle card backgrounds)
-    stone: '#E6E2DA',        // Delicate Borders (Stone)
-    terracotta: '#C27B66',   // Interactive Accent (Terracotta pops & hovers)
+    bg: '#F8F6F9',             // Main page background (Pale Amethyst Alabaster)
+    forest: '#1B0B24',         // Primary Dark (Deep Obsidian Plum / Midnight Purple)
+    sage: '#7B84B8',           // Secondary Accent (Periwinkle Amethyst / Badges / Buttons)
+    clay: '#DDD9DF',           // Neutral Muted (Soft Lilac Mist / Card backgrounds)
+    stone: '#D2C8D8',          // Delicate Borders (Stone Lavender)
+    terracotta: '#944B9E',     // Interactive Accent (Jewel Amethyst Pops & Hovers)
+    palette: [
+      '#F3F1F4', '#DDD9DF', '#C6B3C8', '#B7A0BA', '#9A7E9F', '#805E82',
+      '#7C5E7A', '#D2D0E6', '#9E9FCA', '#7B84B8', '#6675A4', '#585EA4',
+      '#996F9D', '#944B9E', '#625068', '#4E3554', '#3A194E', '#1B0B24'
+    ]
   },
 
   // Logos & Visual Assets

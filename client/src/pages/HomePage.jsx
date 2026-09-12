@@ -10,7 +10,7 @@ import { MineralCompendium } from '../components/home/MineralCompendium';
 import { ReviewsAndEthos } from '../components/home/ReviewsAndEthos';
 import { Sparkles, Leaf } from 'lucide-react';
 
-export const HomePage = ({ onNavigateToCustomizer }) => {
+export const HomePage = ({ onNavigateToCustomizer, onSelectProduct }) => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [visibleCount, setVisibleCount] = useState(8); // 2 rows at 4 columns = 8 items
 
@@ -83,7 +83,8 @@ export const HomePage = ({ onNavigateToCustomizer }) => {
               key={product.id}
               product={product}
               index={idx}
-              onQuickCustomize={() => onNavigateToCustomizer()}
+              onSelectProduct={onSelectProduct}
+              onQuickCustomize={() => onNavigateToCustomizer(product)}
             />
           ))}
         </InView>
