@@ -46,6 +46,14 @@ export const Navbar = ({ onNavigate, currentTab }) => {
                 currentTab === 'shop' ? 'text-botanical-forest font-semibold border-b border-botanical-forest pb-0.5' : ''
               }`}
             >
+              Home
+            </button>
+            <button
+              onClick={() => handleNavClick('products')}
+              className={`transition-colors duration-300 hover:text-botanical-terracotta ${
+                currentTab === 'products' ? 'text-botanical-forest font-semibold border-b border-botanical-forest pb-0.5' : ''
+              }`}
+            >
               Collections
             </button>
             <button
@@ -56,6 +64,16 @@ export const Navbar = ({ onNavigate, currentTab }) => {
             >
               Our Atelier
             </button>
+            {user?.role === 'admin' && (
+              <button
+                onClick={() => handleNavClick('admin')}
+                className={`transition-colors duration-300 text-botanical-terracotta font-semibold flex items-center gap-1 ${
+                  currentTab === 'admin' ? 'border-b border-botanical-terracotta pb-0.5' : ''
+                }`}
+              >
+                <span>Admin Studio</span>
+              </button>
+            )}
           </nav>
 
           {/* Mobile Hamburger Toggle */}
@@ -127,7 +145,13 @@ export const Navbar = ({ onNavigate, currentTab }) => {
                 onClick={() => handleNavClick('shop')}
                 className="text-left py-2 border-b border-botanical-stone/40"
               >
-                Collections
+                Home
+              </button>
+              <button
+                onClick={() => handleNavClick('products')}
+                className="text-left py-2 border-b border-botanical-stone/40"
+              >
+                Collections Directory
               </button>
               <button
                 onClick={() => handleNavClick('story')}
@@ -135,6 +159,14 @@ export const Navbar = ({ onNavigate, currentTab }) => {
               >
                 Our Atelier
               </button>
+              {user?.role === 'admin' && (
+                <button
+                  onClick={() => handleNavClick('admin')}
+                  className="text-left py-2 border-b border-botanical-stone/40 text-botanical-terracotta font-bold"
+                >
+                  ⚡ Admin Studio (Products)
+                </button>
+              )}
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);

@@ -41,7 +41,7 @@ export const CustomizerStudio = ({ initialProduct = null }) => {
   const handleAddCustomToCart = () => {
     addItem({
       id: `custom-${Date.now()}`,
-      name: `Bespoke ${selectedGemstone.name} & ${selectedCord.name}`,
+      name: `Custom ${selectedGemstone.name} & ${selectedCord.name}`,
       price: totalPrice,
       image: 'https://images.unsplash.com/photo-1611591475102-460d7f631545?auto=format&fit=crop&w=800&q=80',
       wristSize,
@@ -197,7 +197,7 @@ export const CustomizerStudio = ({ initialProduct = null }) => {
               ) : (
                 <>
                   <Sparkles className="w-4 h-4" />
-                  <span>Add Bespoke Piece</span>
+                  <span>Add Custom Piece</span>
                 </>
               )}
             </button>

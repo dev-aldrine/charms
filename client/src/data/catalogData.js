@@ -319,7 +319,7 @@ export const BRACELET_CATALOG = [
     fallbackImage: '/images/bracelet-quartz.svg',
     availableSizes: [15, 16, 17, 18],
     customizable: true,
-    tags: ['Ethereal', 'Bespoke Run']
+    tags: ['Ethereal', 'Artisan Run']
   },
   {
     id: 'prod_17',

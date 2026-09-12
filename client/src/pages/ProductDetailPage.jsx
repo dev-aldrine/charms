@@ -137,7 +137,7 @@ export const ProductDetailPage = ({ product, onBack, onSelectProduct, onNavigate
             </div>
             <div className="p-3.5 rounded-2xl bg-white border border-botanical-stone/80 text-center flex flex-col items-center justify-center">
               <RefreshCw className="w-4 h-4 text-botanical-sage mb-1" />
-              <span className="text-[10px] uppercase tracking-wider font-semibold text-botanical-forest">Bespoke Fit</span>
+              <span className="text-[10px] uppercase tracking-wider font-semibold text-botanical-forest">Custom Fit</span>
               <span className="text-[10px] text-botanical-forest/60">Complimentary Resizing</span>
             </div>
           </div>

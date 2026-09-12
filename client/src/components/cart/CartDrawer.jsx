@@ -51,7 +51,7 @@ export const CartDrawer = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <h2 className="font-serif text-2xl font-semibold text-botanical-forest">
-                      Your Bespoke Bag
+                      Your Shopping Bag
                     </h2>
                     <span className="text-xs font-sans px-2.5 py-0.5 rounded-full bg-botanical-stone text-botanical-forest font-medium">
                       {items.reduce((s, i) => s + i.quantity, 0)}
@@ -102,7 +102,7 @@ export const CartDrawer = () => {
                       Your bag is currently empty
                     </p>
                     <p className="text-xs font-sans mt-2 max-w-xs leading-relaxed">
-                      Discover our curated gemstone bracelets or design a bespoke talisman in the Custom Studio.
+                      Discover our curated gemstone bracelets or design a custom talisman in the Custom Studio.
                     </p>
                   </div>
                 ) : (

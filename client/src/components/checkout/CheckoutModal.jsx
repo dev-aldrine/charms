@@ -12,6 +12,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { formatPHP } from '../../utils/formatters';
 import { TransitionPanel } from '../core/TransitionPanel';
 import { BRAND_CONFIG } from '../../brandConfig';
+import { PHILIPPINES_REGIONS_PROVINCES } from '../../data/philippineAddresses';
 
 export const CheckoutModal = () => {
   const { 
@@ -148,7 +149,7 @@ export const CheckoutModal = () => {
                 PayMongo QR Ph Checkout
               </div>
               <h3 className="font-serif text-2xl font-semibold text-botanical-forest mt-0.5">
-                {stepIndex === 0 && 'Bespoke Delivery Information'}
+                {stepIndex === 0 && 'Delivery Information'}
                 {stepIndex === 1 && 'Scan to Pay with Any Philippine App'}
                 {stepIndex === 2 && 'Payment Confirmed & In Crafting'}
               </h3>
@@ -220,7 +221,39 @@ export const CheckoutModal = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-botanical-forest/70 font-medium mb-1">
+                      City / Municipality
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      list="checkout-cities"
+                      placeholder="e.g. Pasig City"
+                      value={formData.city}
+                      onChange={(e) => {
+                        const newCity = e.target.value;
+                        const allCities = PHILIPPINES_REGIONS_PROVINCES.flatMap(p => p.cities);
+                        const matched = allCities.find(c => c.name.toLowerCase() === newCity.toLowerCase());
+                        if (matched) {
+                          setFormData({ 
+                            ...formData, 
+                            city: matched.name, 
+                            postalCode: matched.zip || formData.postalCode 
+                          });
+                        } else {
+                          setFormData({ ...formData, city: newCity });
+                        }
+                      }}
+                      className="w-full bg-botanical-bg border border-botanical-stone rounded-2xl px-3 py-2 text-sm text-botanical-forest"
+                    />
+                    <datalist id="checkout-cities">
+                      {PHILIPPINES_REGIONS_PROVINCES.flatMap(p => p.cities).map((c) => (
+                        <option key={c.name} value={c.name}>{`Postal: ${c.zip}`}</option>
+                      ))}
+                    </datalist>
+                  </div>
                   <div>
                     <label className="block text-xs uppercase tracking-wider text-botanical-forest/70 font-medium mb-1">
                       Barangay
@@ -228,22 +261,21 @@ export const CheckoutModal = () => {
                     <input
                       type="text"
                       required
+                      list="checkout-barangays"
+                      placeholder="e.g. San Antonio"
                       value={formData.barangay}
                       onChange={(e) => setFormData({ ...formData, barangay: e.target.value })}
                       className="w-full bg-botanical-bg border border-botanical-stone rounded-2xl px-3 py-2 text-sm text-botanical-forest"
                     />
-                  </div>
-                  <div>
-                    <label className="block text-xs uppercase tracking-wider text-botanical-forest/70 font-medium mb-1">
-                      City
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.city}
-                      onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                      className="w-full bg-botanical-bg border border-botanical-stone rounded-2xl px-3 py-2 text-sm text-botanical-forest"
-                    />
+                    <datalist id="checkout-barangays">
+                      {(() => {
+                        const allCities = PHILIPPINES_REGIONS_PROVINCES.flatMap(p => p.cities);
+                        const matchedCity = allCities.find(c => c.name.toLowerCase() === formData.city?.toLowerCase());
+                        return (matchedCity ? matchedCity.barangays : []).map(b => (
+                          <option key={b} value={b} />
+                        ));
+                      })()}
+                    </datalist>
                   </div>
                   <div>
                     <label className="block text-xs uppercase tracking-wider text-botanical-forest/70 font-medium mb-1">
@@ -252,8 +284,10 @@ export const CheckoutModal = () => {
                     <input
                       type="text"
                       required
+                      maxLength={4}
+                      placeholder="1605"
                       value={formData.postalCode}
-                      onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, postalCode: e.target.value.replace(/\D/g, '') })}
                       className="w-full bg-botanical-bg border border-botanical-stone rounded-2xl px-3 py-2 text-sm text-botanical-forest"
                     />
                   </div>
@@ -270,7 +304,7 @@ export const CheckoutModal = () => {
                     </span>
                   </div>
                   <div className="text-right text-botanical-forest/70">
-                    <span>{items.length} bespoke item(s)</span>
+                    <span>{items.length} item(s)</span>
                     <span className="block text-[10px] text-botanical-sage font-semibold">
                       Instant Bank/GCash/Maya Settlement
                     </span>
@@ -371,7 +405,7 @@ export const CheckoutModal = () => {
                     Thank You, {formData.fullName.split(' ')[0]}!
                   </h3>
                   <p className="text-sm text-botanical-forest/70 font-sans mt-2 max-w-md mx-auto leading-relaxed">
-                    Your order <strong>#{orderNumber}</strong> has been secured via PayMongo. Our master artisans have queued your bespoke pieces for hand-crafting.
+                    Your order <strong>#{orderNumber}</strong> has been secured via PayMongo. Our master artisans have queued your pieces for hand-crafting.
                   </p>
                 </div>
 

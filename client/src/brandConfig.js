@@ -7,7 +7,7 @@ export const BRAND_CONFIG = {
   brandName: "JOY'S",
   brandSubtitle: "FAIRY CHARMS",
   tagline: "Haute Joaillerie • Living Minerals",
-  announcement: "Complimentary Bespoke Sizing & Free Express Shipping Over ₱3,000",
+  announcement: "Complimentary Custom Sizing & Free Express Shipping Over ₱3,000",
   shippingThreshold: 3000,
   defaultShippingFee: 150,
 

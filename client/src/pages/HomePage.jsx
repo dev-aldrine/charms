@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { BRACELET_CATALOG } from '../data/catalogData';
+import { useProductStore } from '../store/useProductStore';
 import { BRAND_CONFIG } from '../brandConfig';
 import { ProductCard } from '../components/product/ProductCard';
 import { TextEffect } from '../components/core/TextEffect';
@@ -10,25 +11,22 @@ import { MineralCompendium } from '../components/home/MineralCompendium';
 import { ReviewsAndEthos } from '../components/home/ReviewsAndEthos';
 import { Sparkles, Leaf } from 'lucide-react';
 
-export const HomePage = ({ onNavigateToCustomizer, onSelectProduct }) => {
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [visibleCount, setVisibleCount] = useState(8); // 2 rows at 4 columns = 8 items
+export const HomePage = ({ onNavigateToCustomizer, onSelectProduct, onViewAllProducts }) => {
+  const { products, fetchProducts } = useProductStore();
 
-  const handleFilterChange = (category) => {
-    setActiveFilter(category);
-    setVisibleCount(8);
-  };
+  React.useEffect(() => {
+    fetchProducts(false);
+  }, []);
 
-  const filteredProducts = activeFilter === 'All'
-    ? BRACELET_CATALOG
-    : BRACELET_CATALOG.filter(p => p.collection === activeFilter);
+  const activeCatalog = useMemo(() => {
+    return products && products.length > 0 ? products.filter(p => p.isActive !== false) : BRACELET_CATALOG;
+  }, [products]);
 
-  const displayedProducts = filteredProducts.slice(0, visibleCount);
-  const hasMore = visibleCount < filteredProducts.length;
-
-  const handleLoadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 8, filteredProducts.length)); // Load next 2 rows (8 items)
-  };
+  // Featured pieces or first 8 active products
+  const featuredProducts = useMemo(() => {
+    const featured = activeCatalog.filter(p => p.isFeatured);
+    return featured.length >= 4 ? featured.slice(0, 8) : activeCatalog.slice(0, 8);
+  }, [activeCatalog]);
 
   return (
     <div className="space-y-12 md:space-y-16 pb-16">
@@ -40,33 +38,27 @@ export const HomePage = ({ onNavigateToCustomizer, onSelectProduct }) => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <span className="text-xs uppercase tracking-[0.25em] text-botanical-sage font-bold">
-              Bespoke Catalog
+              Signature Catalog
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-botanical-forest mt-1">
               Curated <span className="italic font-normal text-botanical-terracotta">Fine</span> Collections
             </h2>
           </div>
 
-          {/* Collection Filter Buttons */}
-          <div className="flex flex-wrap gap-2">
-            {['All', 'Beaded', 'Cuff', 'Chain', 'Couple'].map((category) => (
-              <motion.button
-                key={category}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handleFilterChange(category)}
-                className={`py-2 px-5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-                  activeFilter === category
-                    ? 'bg-botanical-forest text-white shadow-botanical-sm'
-                    : 'bg-white border border-botanical-stone text-botanical-forest hover:border-botanical-sage'
-                }`}
-              >
-                {category}
-              </motion.button>
-            ))}
+          {/* Direct Link to Complete Compendium */}
+          <div>
+            <motion.button
+              whileHover={{ x: 3 }}
+              onClick={onViewAllProducts}
+              className="py-2.5 px-6 rounded-full text-xs font-semibold uppercase tracking-wider text-botanical-forest hover:text-white bg-white hover:bg-botanical-forest border border-botanical-stone transition-all duration-300 shadow-xs flex items-center gap-2"
+            >
+              <span>Explore All {BRACELET_CATALOG.length} Pieces</span>
+              <span className="text-botanical-sage font-mono">&rarr;</span>
+            </motion.button>
           </div>
         </div>
 
-        {/* Responsive Multi-Column Gallery (4 columns on desktop, exactly 2 rows = 8 items) */}
+        {/* Responsive Multi-Column Gallery (4 columns on desktop, 2 rows = 8 curated pieces) */}
         <InView
           variants={{
             hidden: { opacity: 0, y: 30 },
@@ -78,7 +70,7 @@ export const HomePage = ({ onNavigateToCustomizer, onSelectProduct }) => {
           }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
         >
-          {displayedProducts.map((product, idx) => (
+          {featuredProducts.map((product, idx) => (
             <ProductCard
               key={product.id}
               product={product}
@@ -89,23 +81,21 @@ export const HomePage = ({ onNavigateToCustomizer, onSelectProduct }) => {
           ))}
         </InView>
 
-        {/* See More Products Action Bar */}
-        {hasMore && (
-          <div className="flex flex-col items-center justify-center mt-12 space-y-3">
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={handleLoadMore}
-              className="py-4 px-10 rounded-full bg-botanical-forest hover:bg-botanical-terracotta text-white font-semibold text-xs uppercase tracking-widest transition-all duration-300 shadow-botanical-md flex items-center gap-2 group"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-botanical-sage group-hover:rotate-12 transition-transform" />
-              <span>See More Creations ({filteredProducts.length - visibleCount} Remaining)</span>
-            </motion.button>
-            <span className="text-[11px] text-botanical-forest/60 uppercase tracking-widest font-mono">
-              Showing {displayedProducts.length} of {filteredProducts.length} Atelier Pieces
-            </span>
-          </div>
-        )}
+        {/* See More Products Action Bar (Navigates to dedicated /products page) */}
+        <div className="flex flex-col items-center justify-center mt-12 space-y-3">
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={onViewAllProducts}
+            className="py-4 px-10 rounded-full bg-botanical-forest hover:bg-botanical-terracotta text-white font-semibold text-xs uppercase tracking-widest transition-all duration-300 shadow-botanical-md flex items-center gap-2 group"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-botanical-sage group-hover:rotate-12 transition-transform" />
+            <span>See More Creations (Explore All {BRACELET_CATALOG.length} Pieces)</span>
+          </motion.button>
+          <span className="text-[11px] text-botanical-forest/60 uppercase tracking-widest font-mono">
+            Showing curated highlights &bull; Click to view full directory &amp; filters
+          </span>
+        </div>
       </section>
 
       {/* 3. EDITORIAL ATELIER STATS BAR (Placed After Gallery) */}

@@ -22,7 +22,7 @@ const HERO_SLIDES = [
   {
     id: 'hero_3',
     image: 'https://images.pexels.com/photos/1927259/pexels-photo-1927259.jpeg?auto=compress&cs=tinysrgb&w=1920',
-    collection: 'Earth Elements • Bespoke Talismans',
+    collection: 'Earth Elements • Handcrafted Talismans',
     headline: 'Forged in Geothermal Stillness',
     description: 'Volcanic matte black obsidian and mineral lava for grounding energy.',
     actionText: 'View Obsidian Pieces'

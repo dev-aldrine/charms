@@ -72,28 +72,131 @@ export const InteractiveAddressMap = ({ initialLocation, onLocationChange }) => 
     onLocationChange?.(newCoords);
   };
 
-  const handleGeolocate = () => {
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.');
-      return;
-    }
+  const sendRemoteLog = (event, message, data = null) => {
+    fetch('/api/debug/log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event, message, data })
+    }).catch(() => {});
+  };
+
+  const handleGeolocate = async () => {
     setIsLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const newCoords = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        };
+    sendRemoteLog('LOCATION_REQUESTED', `User clicked "Use My Current Location" from protocol: ${window.location.protocol}`);
+
+    // Try HTML5 Hardware GPS first
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const newCoords = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          };
+          sendRemoteLog('GPS_SUCCESS', `Hardware GPS Acquired accurately (Accuracy: ~${Math.round(pos.coords.accuracy)}m)`, newCoords);
+          setCoords(newCoords);
+          onLocationChange?.(newCoords);
+          setIsLocating(false);
+        },
+        async (err) => {
+          sendRemoteLog('GPS_ERROR', `GPS failed (Code ${err.code}): ${err.message}. Falling back to IP Geolocation...`);
+          await fallbackIpLocation();
+        },
+        { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+      );
+    } else {
+      sendRemoteLog('GPS_NOT_SUPPORTED', 'navigator.geolocation is not supported on this device/browser');
+      await fallbackIpLocation();
+    }
+  };
+
+  const fallbackIpLocation = async () => {
+    try {
+      sendRemoteLog('IP_LOCATION_START', 'Attempting IP Geolocation lookup...');
+      
+      let coordsFound = null;
+
+      // Provider 1: ipwho.is (Free, HTTPS, open CORS)
+      if (!coordsFound) {
+        try {
+          const res = await fetch('https://ipwho.is/');
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.success !== false && data.latitude && data.longitude) {
+              coordsFound = {
+                lat: Number(data.latitude),
+                lng: Number(data.longitude),
+                city: data.city || data.region || 'Metro Manila',
+                region: data.country || 'PH'
+              };
+              sendRemoteLog('PROVIDER_SUCCESS', 'ipwho.is returned coordinates', coordsFound);
+            }
+          }
+        } catch (e) {
+          sendRemoteLog('PROVIDER_FAIL', `ipwho.is failed: ${e.message}`);
+        }
+      }
+
+      // Provider 2: get.geojs.io (Free, HTTPS, open CORS)
+      if (!coordsFound) {
+        try {
+          const res = await fetch('https://get.geojs.io/v1/ip/geo.json');
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.latitude && data.longitude) {
+              coordsFound = {
+                lat: Number(data.latitude),
+                lng: Number(data.longitude),
+                city: data.city || 'Metro Manila',
+                region: data.country || 'PH'
+              };
+              sendRemoteLog('PROVIDER_SUCCESS', 'geojs.io returned coordinates', coordsFound);
+            }
+          }
+        } catch (e) {
+          sendRemoteLog('PROVIDER_FAIL', `geojs.io failed: ${e.message}`);
+        }
+      }
+
+      // Provider 3: Backend proxy
+      if (!coordsFound) {
+        try {
+          const res = await fetch('/api/location/lookup');
+          if (res.ok) {
+            const json = await res.json();
+            const data = json && json.data;
+            if (data && (data.latitude || data.lat)) {
+              coordsFound = {
+                lat: Number(data.latitude || data.lat),
+                lng: Number(data.longitude || data.lon),
+                city: data.city || 'Metro Manila',
+                region: data.region || 'PH'
+              };
+            }
+          }
+        } catch (e) {
+          sendRemoteLog('PROVIDER_FAIL', `backend proxy failed: ${e.message}`);
+        }
+      }
+
+      if (coordsFound) {
+        const newCoords = { lat: coordsFound.lat, lng: coordsFound.lng };
+        sendRemoteLog('IP_LOCATION_SUCCESS', `IP Geolocation Acquired (${coordsFound.city}, ${coordsFound.region})`, newCoords);
         setCoords(newCoords);
         onLocationChange?.(newCoords);
-        setIsLocating(false);
-      },
-      (err) => {
-        console.warn('Geolocation error:', err);
-        setIsLocating(false);
-      },
-      { enableHighAccuracy: true }
-    );
+      } else {
+        const defaultPH = { lat: 14.5995, lng: 120.9842 };
+        sendRemoteLog('IP_LOCATION_DEFAULT', 'Using default Metro Manila coordinates', defaultPH);
+        setCoords(defaultPH);
+        onLocationChange?.(defaultPH);
+      }
+    } catch (err) {
+      sendRemoteLog('IP_LOCATION_FAILED', `IP location error: ${err.message || String(err)}`);
+      const defaultPH = { lat: 14.5995, lng: 120.9842 };
+      setCoords(defaultPH);
+      onLocationChange?.(defaultPH);
+    } finally {
+      setIsLocating(false);
+    }
   };
 
   return (
@@ -123,7 +226,9 @@ export const InteractiveAddressMap = ({ initialLocation, onLocationChange }) => 
         <MapContainer
           center={[coords.lat, coords.lng]}
           zoom={15}
-          scrollWheelZoom={false}
+          scrollWheelZoom={true}
+          touchZoom={true}
+          doubleClickZoom={true}
           className="w-full h-full"
         >
           <ChangeView center={coords} zoom={15} />

@@ -12,7 +12,7 @@ export const Footer = ({ onNavigate }) => {
             JOY’S <span className="font-normal italic text-botanical-sage">ATELIER</span>
           </h2>
           <p className="text-xs text-botanical-clay leading-relaxed max-w-sm font-sans">
-            Bespoke gemstone and fine metal bracelets crafted with botanical intentionality. Based in Manila, shipping nationwide via PayMongo QR Ph.
+            Artisanal gemstone and fine metal bracelets crafted with botanical intentionality. Based in Manila, shipping nationwide via PayMongo QR Ph.
           </p>
           <div className="text-[11px] text-botanical-clay/70">
             © {new Date().getFullYear()} Joy’s Atelier. All rights reserved.
